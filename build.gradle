@@ -2,14 +2,22 @@
  * Build script to ease the pain.
  */
 
-def rootWorkingFolder = [location :new File(".").absolutePath]
-def orchestra = [location: ""]
-def dataRuntime = [location: ""]
-def executionClient= [location: ""]
+def rootWorkingFolder = [location :new File("").absolutePath]
+def orchestra = [name: "orchestra"]
+def dataRuntime = [name: "dataRuntime"]
+def executionClient= [name: "executionClient"]
 def testFolder = [name : "testFolder"]
-def masterConfig = [rootWorkingFolder, orchestra, dataRuntime, executionClient]
+def masterConfig = [rootWorkingFolder, orchestra, dataRuntime, executionClient, testFolder]
 
-task myConfig << {
+def setLocation = { config ->
+    config.location = "$rootWorkingFolder.location/$config.name"
+}
+
+task myInit << {
+    [orchestra, dataRuntime, executionClient, testFolder].each(setLocation)
+}
+
+task myConfig(dependsOn: "myInit") << {
     def header = "---My config---"
     println header
     masterConfig.each { config ->
@@ -18,21 +26,21 @@ task myConfig << {
     header.size().times {print "-"}
 }
 
-task runTest << {
+task runTest(dependsOn: "myInit") << {
     def header = "---Commence run test---"
     println header
-    def rootFolderOfTest = new File("$rootWorkingFolder/$testFolder.name")
+    def rootFolderOfTest = new File("$rootWorkingFolder.location/$testFolder.name")
     if(rootFolderOfTest.mkdirs()) {
         println "successfully created:$testFolder.name"
     }
     header.size().times {print "-"}
 }
 
-task cleanTest << {
+task cleanTest(dependsOn: "myInit") << {
     def header = "---Clean test---"
     println header
-
-
+    def rootFolderOfTest = new File("$rootWorkingFolder.location/$testFolder.name")
+    delete rootFolderOfTest
 
     header.size().times {print "-"}
 }
