@@ -2,10 +2,10 @@
  * Build script to ease the pain.
  */
 
+def rootWorkingFolder = [location :new File(".").absolutePath]
 def orchestra = [location: ""]
 def dataRuntime = [location: ""]
 def executionClient= [location: ""]
-def rootWorkingFolder = [location :new File(".").absolutePath]
 def testFolder = [name : "testFolder"]
 def masterConfig = [rootWorkingFolder, orchestra, dataRuntime, executionClient]
 
@@ -19,12 +19,21 @@ task myConfig << {
 }
 
 task runTest << {
-    def header = "---Commence run test---$testFolder"
+    def header = "---Commence run test---"
     println header
     def rootFolderOfTest = new File("$rootWorkingFolder/$testFolder.name")
     if(rootFolderOfTest.mkdirs()) {
         println "successfully created:$testFolder.name"
     }
+    header.size().times {print "-"}
+}
+
+task cleanTest << {
+    def header = "---Clean test---"
+    println header
+
+
+
     header.size().times {print "-"}
 }
 
