@@ -1,0 +1,18 @@
+/**
+ * Build script to ease the pain.
+ */
+
+def orchestra = [location: ""]
+def dataRuntime = [location: ""]
+def executionClient= [location: ""]
+def masterConfig = [orchestra, dataRuntime, executionClient]
+
+task myConfig << {
+    def header = "---My config---"
+    println header
+    masterConfig.each { config ->
+        println config
+    }
+    header.size().times {print "-"}
+}
+
