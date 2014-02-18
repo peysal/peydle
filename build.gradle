@@ -13,6 +13,12 @@ def setLocation = { config ->
     config.location = "$rootWorkingFolder.location/$config.name"
 }
 
+def makeBackup = {File folder, backupName ->
+    if (folder.isDirectory()) {
+
+    }
+}
+
 task myInit << {
     [orchestra, dataRuntime, executionClient, testFolder].each(setLocation)
 }
