@@ -5,7 +5,9 @@
 def orchestra = [location: ""]
 def dataRuntime = [location: ""]
 def executionClient= [location: ""]
-def masterConfig = [orchestra, dataRuntime, executionClient]
+def rootWorkingFolder = [location :new File(".").absolutePath]
+def testFolder = [name : "testFolder"]
+def masterConfig = [rootWorkingFolder, orchestra, dataRuntime, executionClient]
 
 task myConfig << {
     def header = "---My config---"
@@ -15,4 +17,15 @@ task myConfig << {
     }
     header.size().times {print "-"}
 }
+
+task runTest << {
+    def header = "---Commence run test---$testFolder"
+    println header
+    def rootFolderOfTest = new File("$rootWorkingFolder/$testFolder.name")
+    if(rootFolderOfTest.mkdirs()) {
+        println "successfully created:$testFolder.name"
+    }
+    header.size().times {print "-"}
+}
+
 
