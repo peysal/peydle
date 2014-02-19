@@ -51,4 +51,21 @@ task cleanTest(dependsOn: "myInit") << {
     header.size().times {print "-"}
 }
 
+task backupDataFile << {
+    def header = "---backupDataFile---"
+    println header
 
+    //your code goes here
+
+
+    header.size().times {print "-"}
+}
+
+task backupExecutionClient << {
+    def header = "---backupExecutionClient---"
+    println header
+
+    //your code goes here
+
+    header.size().times {print "-"}
+}
