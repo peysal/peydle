@@ -47,11 +47,13 @@ task ('cleanTest', dependsOn: "myInit") << {
 
 
 task ('backupExecutionClient', type: Copy) {
+    //will only works if got files inside folder
     from "executionClient"
     into "executionClientBackup"
 }
 
 task ('backupDataFile', type: Copy) {
+    //will only works if got files inside folder
     from "dataRuntime/dataFiles"
     into "dataRuntime/dataFilesBackup"
 }
