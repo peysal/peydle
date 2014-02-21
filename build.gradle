@@ -2,22 +2,14 @@
  * Build script to ease the pain.
  */
 
-def rootWorkingFolder = [location :new File("").absolutePath]
+def rootWorkingFolder = [location : file(".") ]
 def orchestra = [name: "orchestra"]
 def dataRuntime = [name: "dataRuntime"]
 def executionClient= [name: "executionClient"]
 def testFolder = [name : "testFolder"]
 def masterConfig = [rootWorkingFolder, orchestra, dataRuntime, executionClient, testFolder]
 
-def setLocation = { config ->
-    config.location = "$rootWorkingFolder.location/$config.name"
-}
-
-task ('myInit') << {
-    [orchestra, dataRuntime, executionClient, testFolder].each(setLocation)
-}
-
-task ('myConfig', dependsOn: "myInit") << {
+task ('showConfig') << {
     def header = "---My config---"
     println header
     masterConfig.each { config ->
@@ -26,23 +18,34 @@ task ('myConfig', dependsOn: "myInit") << {
     header.size().times {print "-"}
 }
 
-task ('runTest', dependsOn: "myInit") << {
-    def header = "---Commence run test---"
-    println header
-    def rootFolderOfTest = new File("$rootWorkingFolder.location/$testFolder.name")
-    if(rootFolderOfTest.mkdirs()) {
-        println "successfully created:$testFolder.name"
+task ('deleteExecutionClient', type: Delete) {
+    def backup = new File(executionClient.name + "Backup")
+    if (backup.exists() ) {
+        delete executionClient.name
+    } else {
+        println "Can't delete $executionClient.name when backup folder is not there"
     }
-    header.size().times {print "-"}
 }
 
-task ('cleanTest', dependsOn: "myInit") << {
-    def header = "---Clean test---"
-    println header
-    def rootFolderOfTest = new File("$rootWorkingFolder.location/$testFolder.name")
-    delete rootFolderOfTest
+task ('deleteDataFiles', type: Delete) {
+    def backup = new File(dataRuntime.name + "/dataFiles" + "Backup")
+    if (backup.exists() ) {
+        delete dataRuntime.name + "/dataFiles"
+    } else {
+        println "Can't delete $dataRuntime.name" + "/dataFiles when backup folder is not there"
+    }
+}
 
-    header.size().times {print "-"}
+task ('restoreExecutionClient', type: Copy) {
+    //will only works if got files inside folder
+    from "executionClientBackup"
+    into "executionClient"
+}
+
+task ('restoreDataFiles', type: Copy) {
+    //will only works if got files inside folder
+    from "dataRuntime/dataFilesBackup"
+    into "dataRuntime/dataFiles"
 }
 
 
