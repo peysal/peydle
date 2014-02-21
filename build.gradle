@@ -13,17 +13,11 @@ def setLocation = { config ->
     config.location = "$rootWorkingFolder.location/$config.name"
 }
 
-def makeBackup = {File folder, backupName ->
-    if (folder.isDirectory()) {
-
-    }
-}
-
-task myInit << {
+task ('myInit') << {
     [orchestra, dataRuntime, executionClient, testFolder].each(setLocation)
 }
 
-task myConfig(dependsOn: "myInit") << {
+task ('myConfig', dependsOn: "myInit") << {
     def header = "---My config---"
     println header
     masterConfig.each { config ->
@@ -32,7 +26,7 @@ task myConfig(dependsOn: "myInit") << {
     header.size().times {print "-"}
 }
 
-task runTest(dependsOn: "myInit") << {
+task ('runTest', dependsOn: "myInit") << {
     def header = "---Commence run test---"
     println header
     def rootFolderOfTest = new File("$rootWorkingFolder.location/$testFolder.name")
@@ -42,7 +36,7 @@ task runTest(dependsOn: "myInit") << {
     header.size().times {print "-"}
 }
 
-task cleanTest(dependsOn: "myInit") << {
+task ('cleanTest', dependsOn: "myInit") << {
     def header = "---Clean test---"
     println header
     def rootFolderOfTest = new File("$rootWorkingFolder.location/$testFolder.name")
@@ -51,21 +45,14 @@ task cleanTest(dependsOn: "myInit") << {
     header.size().times {print "-"}
 }
 
-task backupDataFile << {
-    def header = "---backupDataFile---"
-    println header
 
-    //your code goes here
-
-
-    header.size().times {print "-"}
+task ('backupExecutionClient', type: Copy) {
+    from "executionClient"
+    into "executionClientBackup"
 }
 
-task backupExecutionClient << {
-    def header = "---backupExecutionClient---"
-    println header
-
-    //your code goes here
-
-    header.size().times {print "-"}
+task ('backupDataFile', type: Copy) {
+    from "dataRuntime/dataFiles"
+    into "dataRuntime/dataFilesBackup"
 }
+
