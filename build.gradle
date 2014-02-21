@@ -6,8 +6,7 @@ def rootWorkingFolder = [location : file(".") ]
 def orchestra = [name: "orchestra"]
 def dataRuntime = [name: "dataRuntime"]
 def executionClient= [name: "executionClient"]
-def testFolder = [name : "testFolder"]
-def masterConfig = [rootWorkingFolder, orchestra, dataRuntime, executionClient, testFolder]
+def masterConfig = [rootWorkingFolder, orchestra, dataRuntime, executionClient]
 
 task ('showConfig') << {
     def header = "---My config---"
@@ -38,27 +37,27 @@ task (deleteDataFiles, type: Delete) {
 
 task (restoreExecutionClient, type: Copy) {
     //will only works if got files inside folder
-    from "executionClientBackup"
-    into "executionClient"
+    from "${executionClient.name}Backup"
+    into "$executionClient.name"
 }
 
 task (restoreDataFiles, type: Copy) {
     //will only works if got files inside folder
-    from "dataRuntime/dataFilesBackup"
-    into "dataRuntime/dataFiles"
+    from "${dataRuntime.name}/dataFilesBackup"
+    into "$dataRuntime.name/dataFiles"
 }
 
 
 task (backupExecutionClient, type: Copy) {
-    //will only works if got files inside folder
-    from "executionClient"
-    into "executionClientBackup"
+    //will only works if got files inside folder..for now
+    from "$executionClient.name"
+    into "${executionClient.name}Backup"
 }
 
 task (backupDataFile, type: Copy) {
-    //will only works if got files inside folder
-    from "dataRuntime/dataFiles"
-    into "dataRuntime/dataFilesBackup"
+    //will only works if got files inside folder..for now
+    from "$dataRuntime.name/dataFiles"
+    into "${dataRuntime.name}/dataFilesBackup"
 }
 
 task refreshExecutionClient(
