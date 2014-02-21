@@ -18,7 +18,7 @@ task ('showConfig') << {
     header.size().times {print "-"}
 }
 
-task ('deleteExecutionClient', type: Delete) {
+task (deleteExecutionClient, type: Delete) {
     def backup = new File(executionClient.name + "Backup")
     if (backup.exists() ) {
         delete executionClient.name
@@ -27,7 +27,7 @@ task ('deleteExecutionClient', type: Delete) {
     }
 }
 
-task ('deleteDataFiles', type: Delete) {
+task (deleteDataFiles, type: Delete) {
     def backup = new File(dataRuntime.name + "/dataFiles" + "Backup")
     if (backup.exists() ) {
         delete dataRuntime.name + "/dataFiles"
@@ -36,28 +36,38 @@ task ('deleteDataFiles', type: Delete) {
     }
 }
 
-task ('restoreExecutionClient', type: Copy) {
+task (restoreExecutionClient, type: Copy) {
     //will only works if got files inside folder
     from "executionClientBackup"
     into "executionClient"
 }
 
-task ('restoreDataFiles', type: Copy) {
+task (restoreDataFiles, type: Copy) {
     //will only works if got files inside folder
     from "dataRuntime/dataFilesBackup"
     into "dataRuntime/dataFiles"
 }
 
 
-task ('backupExecutionClient', type: Copy) {
+task (backupExecutionClient, type: Copy) {
     //will only works if got files inside folder
     from "executionClient"
     into "executionClientBackup"
 }
 
-task ('backupDataFile', type: Copy) {
+task (backupDataFile, type: Copy) {
     //will only works if got files inside folder
     from "dataRuntime/dataFiles"
     into "dataRuntime/dataFilesBackup"
 }
 
+task refreshExecutionClient(
+        dependsOn: [backupExecutionClient, deleteExecutionClient, restoreExecutionClient])
+
+task refreshDataFiles(
+        dependsOn: [backupDataFile, deleteDataFiles, restoreDataFiles]
+)
+
+task refreshTesting (
+        dependsOn: [refreshExecutionClient, refreshDataFiles]
+)
