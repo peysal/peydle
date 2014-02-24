@@ -8,7 +8,7 @@ def dataRuntime = [name: "dataRuntime"]
 def executionClient= [name: "executionClient"]
 def masterConfig = [rootWorkingFolder, orchestra, dataRuntime, executionClient]
 
-task ('showConfig') << {
+task (showConfig) << {
     def header = "---My config---"
     println header
     masterConfig.each { config ->
@@ -17,22 +17,12 @@ task ('showConfig') << {
     header.size().times {print "-"}
 }
 
-task (deleteExecutionClient, type: Delete) {
-    def backup = new File(executionClient.name + "Backup")
-    if (backup.exists() ) {
-        delete executionClient.name
-    } else {
-        println "Can't delete $executionClient.name when backup folder is not there"
-    }
+task (deleteExecutionClient, type: Delete)  {
+    delete executionClient.name
 }
 
 task (deleteDataFiles, type: Delete) {
-    def backup = new File(dataRuntime.name + "/dataFiles" + "Backup")
-    if (backup.exists() ) {
-        delete dataRuntime.name + "/dataFiles"
-    } else {
-        println "Can't delete $dataRuntime.name" + "/dataFiles when backup folder is not there"
-    }
+    delete dataRuntime.name + "/DataFiles"
 }
 
 task (restoreExecutionClient, type: Copy) {
@@ -43,8 +33,8 @@ task (restoreExecutionClient, type: Copy) {
 
 task (restoreDataFiles, type: Copy) {
     //will only works if got files inside folder
-    from "${dataRuntime.name}/dataFilesBackup"
-    into "$dataRuntime.name/dataFiles"
+    from "${dataRuntime.name}/DataFilesBackup"
+    into "$dataRuntime.name/DataFiles"
 }
 
 
@@ -54,17 +44,17 @@ task (backupExecutionClient, type: Copy) {
     into "${executionClient.name}Backup"
 }
 
-task (backupDataFile, type: Copy) {
+task (backupDataFiles, type: Copy) {
     //will only works if got files inside folder..for now
-    from "$dataRuntime.name/dataFiles"
-    into "${dataRuntime.name}/dataFilesBackup"
+    from "$dataRuntime.name/DataFiles"
+    into "${dataRuntime.name}/DataFilesBackup"
 }
 
 task refreshExecutionClient(
         dependsOn: [backupExecutionClient, deleteExecutionClient, restoreExecutionClient])
 
 task refreshDataFiles(
-        dependsOn: [backupDataFile, deleteDataFiles, restoreDataFiles]
+        dependsOn: [backupDataFiles, deleteDataFiles, restoreDataFiles]
 )
 
 task refreshTesting (
