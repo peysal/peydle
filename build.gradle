@@ -50,11 +50,13 @@ task (backupDataFiles, type: Copy) {
     into "${dataRuntime.name}/DataFilesBackup"
 }
 
+task initialBackup(dependsOn: [backupExecutionClient, backupDataFiles])
+
 task refreshExecutionClient(
-        dependsOn: [backupExecutionClient, deleteExecutionClient, restoreExecutionClient])
+        dependsOn: [deleteExecutionClient, restoreExecutionClient])
 
 task refreshDataFiles(
-        dependsOn: [backupDataFiles, deleteDataFiles, restoreDataFiles]
+        dependsOn: [deleteDataFiles, restoreDataFiles]
 )
 
 task refreshTesting (
