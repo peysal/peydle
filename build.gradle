@@ -24,6 +24,12 @@ task (deleteDataFiles) << {
     ant.delete(dir: "${dataRuntime.name}/DataFiles")
 }
 
+task (deleteLogs) << {
+    ant.delete {
+        fileset(dir: "${orchestra.name}/apps/logs", includes: "**/*.*")
+    }
+}
+
 task (restoreExecutionClient) << {
     ant.copy(todir: "$executionClient.name") {
         fileset(dir: "${executionClient.name}Backup")
