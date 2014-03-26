@@ -1,7 +1,6 @@
 /**
  * Build script to ease the pain.
  */
-
 def rootWorkingFolder = [location : file(".") ]
 def orchestra = [name: "orchestra"]
 def dataRuntime = [name: "dataRuntime"]
@@ -17,37 +16,36 @@ task (showConfig) << {
     header.size().times {print "-"}
 }
 
-task (deleteExecutionClient, type: Delete)  {
-    delete executionClient.name
+task (deleteExecutionClient) << {
+    ant.delete(dir: executionClient.name)
 }
 
-task (deleteDataFiles, type: Delete) {
-    delete dataRuntime.name + "/DataFiles"
+task (deleteDataFiles) << {
+    ant.delete(dir: "${dataRuntime.name}/DataFiles")
 }
 
-task (restoreExecutionClient, type: Copy) {
-    //will only works if got files inside folder
-    from "${executionClient.name}Backup"
-    into "$executionClient.name"
+task (restoreExecutionClient) << {
+    ant.copy(todir: "$executionClient.name") {
+        fileset(dir: "${executionClient.name}Backup")
+    }
 }
 
-task (restoreDataFiles, type: Copy) {
-    //will only works if got files inside folder
-    from "${dataRuntime.name}/DataFilesBackup"
-    into "$dataRuntime.name/DataFiles"
+task (restoreDataFiles) << {
+    ant.copy(todir: "$dataRuntime.name/DataFiles") {
+        fileset(dir: "${dataRuntime.name}/DataFilesBackup")
+    }
 }
 
-
-task (backupExecutionClient, type: Copy) {
-    //will only works if got files inside folder..for now
-    from "$executionClient.name"
-    into "${executionClient.name}Backup"
+task (backupExecutionClient) << {
+    ant.copy(todir: "${executionClient.name}Backup") {
+        fileset(dir: "$executionClient.name")
+    }
 }
 
-task (backupDataFiles, type: Copy) {
-    //will only works if got files inside folder..for now
-    from "$dataRuntime.name/DataFiles"
-    into "${dataRuntime.name}/DataFilesBackup"
+task (backupDataFiles) << {
+    ant.copy(todir: "${dataRuntime.name}/DataFilesBackup") {
+        fileset(dir: "$dataRuntime.name/DataFiles")
+    }
 }
 
 task initialBackup(dependsOn: [backupExecutionClient, backupDataFiles])
