@@ -2,9 +2,9 @@
  * Build script to ease the pain.
  */
 def rootWorkingFolder = [location : file(".") ]
-def orchestra = [name: "orchestra"]
-def dataRuntime = [name: "dataRuntime"]
-def executionClient= [name: "executionClient"]
+def orchestra = [name: orchestra]
+def dataRuntime = [name: dataRuntime]
+def executionClient= [name: executionClient]
 def masterConfig = [rootWorkingFolder, orchestra, dataRuntime, executionClient]
 
 task (showConfig) << {
