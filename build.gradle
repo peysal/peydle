@@ -1,11 +1,21 @@
 /**
  * Build script to ease the pain.
  */
+apply plugin:'groovy'
+
 def rootWorkingFolder = [location : file(".") ]
 def orchestra = [name: orchestra]
 def dataRuntime = [name: dataRuntime]
 def executionClient= [name: executionClient]
 def masterConfig = [rootWorkingFolder, orchestra, dataRuntime, executionClient]
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.2.0'
+}
 
 task (showConfig) << {
     def header = "---My config---"
@@ -52,6 +62,13 @@ task (backupDataFiles) << {
     ant.copy(todir: "${dataRuntime.name}/DataFilesBackup") {
         fileset(dir: "$dataRuntime.name/DataFiles")
     }
+}
+
+task (runSimple, dependsOn: 'classes', type: JavaExec) {
+    main = 'main.groovy.Preparation'
+    classpath = sourceSets.main.runtimeClasspath
+    //args 'mrhaki'
+    //systemProperty 'simple.message', 'Hello '
 }
 
 task initialBackup(dependsOn: [backupExecutionClient, backupDataFiles])
