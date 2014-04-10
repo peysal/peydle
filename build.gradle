@@ -15,6 +15,7 @@ repositories {
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.2.0'
+    runtime files('lib/sqljdbc.jar')
 }
 
 task (showConfig) << {
@@ -80,6 +81,12 @@ task (validation, dependsOn: 'classes', type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+task (clearDb, dependsOn: 'classes', type: JavaExec) {
+    main = 'main.groovy.ClearDatabase'
+    classpath = sourceSets.main.runtimeClasspath
+    args dbDriver, dbServer, dbPort, dbUser, dbPassword
+}
+
 task initialBackup(dependsOn: [backupExecutionClient, backupDataFiles])
 
 task refreshExecutionClient(
@@ -90,5 +97,5 @@ task refreshDataFiles(
 )
 
 task refreshTesting (
-        dependsOn: [refreshExecutionClient, refreshDataFiles]
+        dependsOn: [refreshExecutionClient, refreshDataFiles, clearDb]
 )
