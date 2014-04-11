@@ -69,10 +69,11 @@ task (backupDataFiles) << {
  * btNumber default value will be override with value pass when executed with gradle
  */
 def btNumber = 0    //default
+def businessTest = 'businessTest'
 task (preparation, dependsOn: 'classes', type: JavaExec) {
     main = 'main.groovy.Preparation'
     classpath = sourceSets.main.runtimeClasspath
-    args btNumber, 'args2'
+    args btNumber, businessTest
 }
 
 task (scenario, dependsOn: 'classes', type: JavaExec) {

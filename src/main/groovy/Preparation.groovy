@@ -11,8 +11,11 @@ Utils.print("+", "starting preparation")
 
 def businessTestNumber = args[0]
 Utils.info("+", "businessTestNumber=${businessTestNumber}")
+def businessTestFolder = args[1]
+Utils.info("+", "businessTestFolder=${businessTestFolder}")
 
-def btFolder = new File()
+def btFolder = new File(businessTestFolder)
+if (btFolder.exists() && btFolder.isDirectory()) {
 
-def ant = new AntBuilder()
+}
 
