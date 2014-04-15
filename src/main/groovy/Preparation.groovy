@@ -11,16 +11,14 @@ import org.apache.commons.vfs2.impl.DefaultFileMonitor
  * 2) it assume the business test case folder convention is setup successfully
  * 3) it assume the file exist
  */
-//
-//Utils.print("+", "starting preparation")
-//
-//def businessTestNumber = args[0]
-//Utils.info("+", "businessTestNumber=${businessTestNumber}")
+
+Utils.print("+", "starting preparation")
+def businessTestNumber = args[0]
+def backupAbsoluteLocation = args[1]
+Utils.info("+", "businessTestNumber=${businessTestNumber}, backupAbsoluteLocation=${backupAbsoluteLocation}")
 
 FileSystemManager manager = VFS.getManager();
-def absoluteLocation = new File('D:/learningWorkspace/peydle/executionClient/backup')
-println absoluteLocation.absolutePath
-FileObject file= manager.resolveFile(absoluteLocation.absolutePath);
+FileObject file= manager.resolveFile(backupAbsoluteLocation);
 
 DefaultFileMonitor fm = new DefaultFileMonitor(new BackupListener());
 fm.setRecursive(true);
@@ -30,4 +28,5 @@ for (int i = 1; i < 6; i++) {
     println "sleeps for 5 second at step ${i}"
     sleep(5000)
 }
+fm.stop()
 
