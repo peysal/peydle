@@ -1,5 +1,10 @@
 package main.groovy
 
+import org.apache.commons.vfs2.FileObject
+import org.apache.commons.vfs2.FileSystemManager
+import org.apache.commons.vfs2.VFS
+import org.apache.commons.vfs2.impl.DefaultFileMonitor
+
 /**
  * Prepare the environment for the testing to happen in Scenario phase.
  * 1) it assume the orchestra tool already running successfully
@@ -8,14 +13,20 @@ package main.groovy
  */
 
 Utils.print("+", "starting preparation")
-
 def businessTestNumber = args[0]
-Utils.info("+", "businessTestNumber=${businessTestNumber}")
-def businessTestFolder = args[1]
-Utils.info("+", "businessTestFolder=${businessTestFolder}")
+def backupAbsoluteLocation = args[1]
+Utils.info("+", "businessTestNumber=${businessTestNumber}, backupAbsoluteLocation=${backupAbsoluteLocation}")
 
-def btFolder = new File(businessTestFolder)
-if (btFolder.exists() && btFolder.isDirectory()) {
+FileSystemManager manager = VFS.getManager();
+FileObject file= manager.resolveFile(backupAbsoluteLocation);
 
+DefaultFileMonitor fm = new DefaultFileMonitor(new BackupListener());
+fm.setRecursive(true);
+fm.addFile(file);
+fm.start()
+for (int i = 1; i < 6; i++) {
+    println "sleeps for 5 second at step ${i}"
+    sleep(5000)
 }
+fm.stop()
 
