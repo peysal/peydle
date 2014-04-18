@@ -90,7 +90,19 @@ task (validation, dependsOn: 'classes', type: JavaExec) {
 task (clearDb, dependsOn: 'classes', type: JavaExec) {
     main = 'main.groovy.ClearDatabase'
     classpath = sourceSets.main.runtimeClasspath
-    args dbDriver, dbServer, dbPort, dbUser, dbPassword
+    args dbDriver, dbServer, dbPort, dbUser, dbPassword, cycleDb, monthlyDb
+}
+
+task (isCycleContainData, dependsOn: 'classes', type: JavaExec) {
+    main = 'main.groovy.IsCycleContainData'
+    classpath = sourceSets.main.runtimeClasspath
+    args dbDriver, dbServer, dbPort, dbUser, dbPassword, cycleDb
+}
+
+task (isMonthlyContainData, dependsOn: 'classes', type: JavaExec) {
+    main = 'main.groovy.IsMonthlyContainData'
+    classpath = sourceSets.main.runtimeClasspath
+    args dbDriver, dbServer, dbPort, dbUser, dbPassword, monthlyDb
 }
 
 task initialBackup(dependsOn: [backupExecutionClient, backupDataFiles])
@@ -104,4 +116,8 @@ task refreshDataFiles(
 
 task refreshTesting (
         dependsOn: [refreshExecutionClient, refreshDataFiles, clearDb]
+)
+
+task isDbContainData(
+        dependsOn: [isCycleContainData, isMonthlyContainData]
 )
