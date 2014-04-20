@@ -77,7 +77,7 @@ def incomingPath = new File("${executionClient.name}/incoming")
 task (preparation, dependsOn: 'classes', type: JavaExec) {
     main = 'main.groovy.Preparation'
     classpath = sourceSets.main.runtimeClasspath
-    args btPath.absolutePath, new File(backupLocation).absolutePath, incomingPath.absolutePath
+    args btPath.absolutePath, new File(backupLocation).absolutePath, incomingPath.absolutePath, secondsToSleep
 }
 
 task (scenario, dependsOn: 'classes', type: JavaExec) {

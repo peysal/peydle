@@ -16,27 +16,27 @@ Utils.print("+", "starting preparation")
 def btPath = args[0]
 def backupAbsoluteLocation = args[1]
 def incomingAbsoluteLocation = args[2]
+def secondsToSleep = args[3] as Long
 Utils.info("+", "btPath=${btPath}, " +
         "backupAbsoluteLocation=${backupAbsoluteLocation}, \n" +
         "incomingAbsoluteLocation=${incomingAbsoluteLocation}")
 
 def ant = new AntBuilder()
 
+FileSystemManager manager = VFS.getManager();
+FileObject backupFileMonitor = manager.resolveFile(backupAbsoluteLocation);
+DefaultFileMonitor fm = new DefaultFileMonitor(new BackupListener());
+fm.setRecursive(true);
+fm.addFile(backupFileMonitor);
+fm.start()  //running on daemon thread
 new File(btPath).eachFile { file ->
-    println file.name
+    println "move ${file.name} to incoming folder"
     ant.move(file: file, toDir: incomingAbsoluteLocation)
+    println "looking for ${file.name} inside backup"
+
+    for (int i = 1; i < 3; i++) {
+        println "sleeps for ${secondsToSleep} second, ${i}"
+        sleep(secondsToSleep)
+    }
 }
-
-//FileSystemManager manager = VFS.getManager();
-//FileObject file= manager.resolveFile(backupAbsoluteLocation);
-//
-//DefaultFileMonitor fm = new DefaultFileMonitor(new BackupListener());
-//fm.setRecursive(true);
-//fm.addFile(file);
-//fm.start()
-//for (int i = 1; i < 6; i++) {
-//    println "sleeps for 5 second at step ${i}"
-//    sleep(5000)
-//}
-//fm.stop()
-
+fm.stop()

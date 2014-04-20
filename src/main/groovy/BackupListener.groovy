@@ -9,7 +9,7 @@ import org.apache.commons.vfs2.FileListener
 class BackupListener implements FileListener {
     @Override
     void fileCreated(FileChangeEvent event) throws Exception {
-        println("file created")
+        println("file created: ${event.file.name}")
     }
 
     @Override
