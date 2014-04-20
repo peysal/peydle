@@ -13,20 +13,30 @@ import org.apache.commons.vfs2.impl.DefaultFileMonitor
  */
 
 Utils.print("+", "starting preparation")
-def businessTestNumber = args[0]
+def btPath = args[0]
 def backupAbsoluteLocation = args[1]
-Utils.info("+", "businessTestNumber=${businessTestNumber}, backupAbsoluteLocation=${backupAbsoluteLocation}")
+def incomingAbsoluteLocation = args[2]
+Utils.info("+", "btPath=${btPath}, " +
+        "backupAbsoluteLocation=${backupAbsoluteLocation}, \n" +
+        "incomingAbsoluteLocation=${incomingAbsoluteLocation}")
 
-FileSystemManager manager = VFS.getManager();
-FileObject file= manager.resolveFile(backupAbsoluteLocation);
+def ant = new AntBuilder()
 
-DefaultFileMonitor fm = new DefaultFileMonitor(new BackupListener());
-fm.setRecursive(true);
-fm.addFile(file);
-fm.start()
-for (int i = 1; i < 6; i++) {
-    println "sleeps for 5 second at step ${i}"
-    sleep(5000)
+new File(btPath).eachFile { file ->
+    println file.name
+    ant.move(file: file, toDir: incomingAbsoluteLocation)
 }
-fm.stop()
+
+//FileSystemManager manager = VFS.getManager();
+//FileObject file= manager.resolveFile(backupAbsoluteLocation);
+//
+//DefaultFileMonitor fm = new DefaultFileMonitor(new BackupListener());
+//fm.setRecursive(true);
+//fm.addFile(file);
+//fm.start()
+//for (int i = 1; i < 6; i++) {
+//    println "sleeps for 5 second at step ${i}"
+//    sleep(5000)
+//}
+//fm.stop()
 

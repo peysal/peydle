@@ -1,5 +1,6 @@
 /**
  * Build script to ease the pain.
+ * This script and its property file need to be at the root of executionClient and dataRuntime folder
  */
 apply plugin:'groovy'
 
@@ -16,6 +17,7 @@ repositories {
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.2.0'
     compile 'org.apache.commons:commons-vfs2:2.0'
+    compile 'org.apache.ant:ant:1.8.2'
     runtime files('lib/sqljdbc.jar')
 }
 
@@ -69,18 +71,13 @@ task (backupDataFiles) << {
 /**
  * btNumber default value will be override with value pass when executed with gradle
  */
-def btNumber = 0    //default
-def backupLocation = "${executionClient.name}/backup"    //default
+def backupLocation = "${executionClient.name}/backup"
+def btPath = new File("${businessTestFolderPath}/${btNumber}")
+def incomingPath = new File("${executionClient.name}/incoming")
 task (preparation, dependsOn: 'classes', type: JavaExec) {
     main = 'main.groovy.Preparation'
     classpath = sourceSets.main.runtimeClasspath
-    args btNumber, new File(backupLocation).absolutePath
-}
-
-task (simplePreparation, dependsOn: 'classes', type: JavaExec) {
-    main = 'main.groovy.SimplePreparation'
-    classpath = sourceSets.main.runtimeClasspath
-    args sourceTestFolder, new File(backupLocation).absolutePath
+    args btPath.absolutePath, new File(backupLocation).absolutePath, incomingPath.absolutePath
 }
 
 task (scenario, dependsOn: 'classes', type: JavaExec) {
