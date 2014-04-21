@@ -1,0 +1,16 @@
+#Client ${client}
+${client}=C:/CMS/${user} Runtime/Execution_Client ${client}/cms_config.properties
+${client}.FILES=ACCOUNT.csv,CUSTOMER.csv
+${client}.CMDSOUTPUTFOLDER=C:/CMS/${user} Runtime/Customer Management Runtime Framework_Client ${client}/DataFiles/Output
+${client}.DBSERVER=10.188.207.161
+${client}.DBNAME=CMS_CYCLE_CLIENT${client}
+${client}.DBPORT=1433
+${client}.DBUSER=cms${client}
+${client}.DBPASSWORD=cms${client}123
+${client}.DBFROM=CMS_CYCLE_CLIENT${client}
+${client}.DBTO=CMS_MONTHLY_CLIENT${client}
+${client}.PENTAHOSCRIPTFILESDIR=C:/CMS/Connectivity/CMS/conf/Pentaho/X/Repository/v.1.1
+${client}.PENTAHOSOURCEFILESDIR=C:/CMS/${user} Runtime/Customer Management Runtime Framework_Client ${client}/DataFiles/Output/Result
+${client}.RUNDATE=CUSTOMER,bp0processdate;Account,gi0cycledate
+${client}.DBACCOUNT=Account
+${client}.DBCUSTOMER=Customer

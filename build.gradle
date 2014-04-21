@@ -10,7 +10,7 @@ def dataRuntime = [name: dataRuntime]
 def executionClient= [name: executionClient]
 def masterConfig = [rootWorkingFolder, orchestra, dataRuntime, executionClient]
 
-//def externalLib = new File("")
+//def externalLib = new File("lib")
 
 repositories {
     mavenCentral()
@@ -20,7 +20,7 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.2.0'
     compile 'org.apache.commons:commons-vfs2:2.0'
     compile 'org.apache.ant:ant:1.8.2'
-//    compile fileTree(dir: externalLib, include: '*.jar')
+//    compile runtime fileTree(dir: externalLib, include: '*.jar')
     runtime files('lib/sqljdbc.jar')
 }
 
