@@ -14,14 +14,14 @@ usersClientInfo.each { userClientInfo ->
     def binding = ["clientBusinessName": "Client " + userClientInfo, "client": userClientInfo,
             "clientUser": userClientInfo.toLowerCase(), "clientPassword": userClientInfo.toLowerCase()]
     template = engine.createTemplate(f).make(binding)
-    templatesOutput += (template.toString() + "\n\n")
+    templatesOutput += (template.toString() + "\n")
 }
 
 explorersClientInfo.each { explorerClientInfo ->
-    def binding = ["clientBusinessName": "Client " + explorerClientInfo, "client": explorerClientInfo,
+    def binding = ["clientBusinessName": "Explorer " + explorerClientInfo, "client": explorerClientInfo,
             "clientUser": explorerClientInfo.toLowerCase(), "clientPassword": explorerClientInfo.toLowerCase()]
     template = engine.createTemplate(f).make(binding)
-    templatesOutput += (template.toString() + "\n\n")
+    templatesOutput += (template.toString() + "\n")
 }
 
 println templatesOutput
