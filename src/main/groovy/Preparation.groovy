@@ -1,10 +1,5 @@
 package main.groovy
 
-import org.apache.commons.vfs2.FileObject
-import org.apache.commons.vfs2.FileSystemManager
-import org.apache.commons.vfs2.VFS
-import org.apache.commons.vfs2.impl.DefaultFileMonitor
-
 /**
  * Prepare the environment for the testing to happen in Scenario phase.
  * 1) it assume the orchestra tool already running successfully
@@ -23,20 +18,15 @@ Utils.info("+", "btPath=${btPath}, " +
 
 def ant = new AntBuilder()
 
-FileSystemManager manager = VFS.getManager();
-FileObject backupFileMonitor = manager.resolveFile(backupAbsoluteLocation);
-DefaultFileMonitor fm = new DefaultFileMonitor(new BackupListener());
-fm.setRecursive(true);
-fm.addFile(backupFileMonitor);
-fm.start()  //running on daemon thread
 new File(btPath).eachFile { file ->
     println "move ${file.name} to incoming folder"
     ant.move(file: file, toDir: incomingAbsoluteLocation)
     println "looking for ${file.name} inside backup"
-
-    for (int i = 1; i < 3; i++) {
-        println "sleeps for ${secondsToSleep} second, ${i}"
-        sleep(secondsToSleep)
+    def counter = 1
+    while ( counter < 3) {
+        Thread.sleep(secondsToSleep)
+        println "cheking the file at ${secondsToSleep/1000 * counter} second"
+        counter++
     }
+    //need to think out what will happen if file not created within time limit
 }
-fm.stop()

@@ -18,7 +18,6 @@ repositories {
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.2.0'
-    compile 'org.apache.commons:commons-vfs2:2.0'
     compile 'org.apache.ant:ant:1.8.2'
 //    compile runtime fileTree(dir: externalLib, include: '*.jar')
     runtime files('lib/sqljdbc.jar')
