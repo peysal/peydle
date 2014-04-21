@@ -13,7 +13,8 @@ def templatesOutput = ""
 
 usersClientInfo.each { userClientInfo ->
     userClientInfo.clients.each { client ->
-        def binding = ["user": userClientInfo.user, "client": client]
+        def binding = ["user": userClientInfo.user, "client": client, "clientUser": client.toLowerCase(),
+                "clientPassword": client.toLowerCase()]
         template = engine.createTemplate(f).make(binding)
         templatesOutput += (template.toString() + "\n\n")
     }
