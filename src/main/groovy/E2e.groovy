@@ -12,6 +12,7 @@ def btPath = args[0]
 def backupAbsoluteLocation = args[1]
 def incomingAbsoluteLocation = args[2]
 def secondsToSleep = args[3] as Long
+def timeSplitter = 2
 Utils.info("+", "btPath=${btPath}, " +
         "backupAbsoluteLocation=${backupAbsoluteLocation}, \n" +
         "incomingAbsoluteLocation=${incomingAbsoluteLocation}")
@@ -21,12 +22,14 @@ def ant = new AntBuilder()
 new File(btPath).eachFile { file ->
     println "move ${file.name} to incoming folder"
     ant.move(file: file, toDir: incomingAbsoluteLocation)
-    println "looking for ${file.name} inside backup"
-    def counter = 1
-    while ( counter < 3) {
-        Thread.sleep(secondsToSleep)
-        println "cheking the file at ${secondsToSleep/1000 * counter} second"
-        counter++
+    println "now looking for ${file.name} inside backup for ${secondsToSleep/1000} seconds"
+    long secondsPerProcess = secondsToSleep / timeSplitter
+    def secondsLeft = secondsToSleep
+
+    while ( secondsPerProcess <= secondsLeft) {
+        Thread.sleep(secondsPerProcess)
+        secondsLeft -= secondsPerProcess
+        println "Seconds left to check: ${secondsLeft /1000} for file:${file.name}"
+
     }
-    //need to think out what will happen if file not created within time limit
 }

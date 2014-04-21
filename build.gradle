@@ -76,20 +76,10 @@ task (backupDataFiles) << {
 def backupLocation = "${executionClient.name}/backup"
 def btPath = new File("${businessTestFolderPath}/${btNumber}")
 def incomingPath = new File("${executionClient.name}/incoming")
-task (preparation, dependsOn: 'classes', type: JavaExec) {
-    main = 'main.groovy.Preparation'
+task (e2e, dependsOn: 'classes', type: JavaExec) {
+    main = 'main.groovy.E2e'
     classpath = sourceSets.main.runtimeClasspath
     args btPath.absolutePath, new File(backupLocation).absolutePath, incomingPath.absolutePath, secondsToSleep
-}
-
-task (scenario, dependsOn: 'classes', type: JavaExec) {
-    main = 'main.groovy.Scenario'
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task (validation, dependsOn: 'classes', type: JavaExec) {
-    main = 'main.groovy.Validation'
-    classpath = sourceSets.main.runtimeClasspath
 }
 
 task (clearDb, dependsOn: 'classes', type: JavaExec) {
